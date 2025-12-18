@@ -16,11 +16,13 @@ jobs:
           repository: vitoplantamura/MagicTrackpad2ForWindows
           ref: ossign
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
       - name: Setup build environment
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-version: '2022'
-
 
       - name: Build driver
         shell: bash
@@ -43,3 +45,4 @@ jobs:
         with:
           name: drivers
           path: drivers.zip
+
