@@ -22,8 +22,8 @@ jobs:
       - name: Cache packages
         uses: actions/cache@v4
         with:
-          path: prime-numbers
-          key: ${{ runner.os }}-primes
+          path: package-cache
+          key: ${{ runner.os }}-packages
 
       - name: Nuget install
         run: |
