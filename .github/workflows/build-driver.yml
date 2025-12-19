@@ -21,8 +21,8 @@ jobs:
       
       - name: Nuget install
         run: |
-          nuget restore ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -PackagesDirectory=${{ github.workspace }}\packages
-          nuget restore ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -PackagesDirectory=${{ github.workspace }}\packages
+          nuget restore ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -PackagesDirectory ${{ github.workspace }}\packages
+          nuget restore ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -PackagesDirectory ${{ github.workspace }}\packages
           Add-Content $env:GITHUB_PATH "${{ github.workspace }}\packages\Microsoft.Windows.WDK.x64.10.0.26100.6584\c\bin\10.0.26100.0\x64"
 
       - name: Build driver
