@@ -22,7 +22,7 @@ jobs:
       - name: Cache packages
         uses: actions/cache@v4
         with:
-          path: package-cache
+          path: packages
           key: ${{ runner.os }}-packages
 
       - name: Nuget install
@@ -31,29 +31,29 @@ jobs:
           nuget restore ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -PackagesDirectory ${{ github.workspace }}\packages
           Add-Content $env:GITHUB_PATH "${{ github.workspace }}\packages\Microsoft.Windows.WDK.x64.10.0.26100.6584\c\bin\10.0.26100.0\x64"    
 
-      - name: Build driver
-        shell: bash
-        run: |
-          ln -s ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x64/apivalidator.exe ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x86/apivalidator.exe
-          sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj
-          sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj
-          msbuild.exe ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -p:Configuration=Release -p:Platform=x64
-          msbuild.exe ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -p:Configuration=Release -p:Platform=x64
-          mkdir bin
-          cp build/AmtPtpDevice_AMD64.inf bin/
-          cp AmtPtpDeviceUsbUm/build/AmtPtpDeviceUsbUm/x64/Release/AmtPtpDeviceUsbUm.dll bin/
-          cp AmtPtpHidFilter/build/AmtPtpHidFilter/x64/Release/AmtPtpHidFilter.sys bin/
-          cp AmtPtpDeviceUsbUm/build/AmtPtpDeviceUsbUm/x64/Release/AmtPtpDeviceUsbUm.pdb bin/
-          cp AmtPtpHidFilter/build/AmtPtpHidFilter/x64/Release/AmtPtpHidFilter.pdb bin/
-          echo -e '.OPTION EXPLICIT ;\n.Set CabinetName1=driver.cab\n.Set CompressionType=LZX\n.Set CabinetFileCountThreshold=0\n.Set FolderFileCountThreshold=0\n.Set FolderSizeThreshold=0\n.Set MaxCabinetSize=0\n.Set MaxDiskFileCount=0\n.Set MaxDiskSize=0\n\n.Set DestinationDir= ;\nbin\AmtPtpDevice_AMD64.inf\nbin\AmtPtpDeviceUsbUm.dll\nbin\AmtPtpHidFilter.sys\nbin\AmtPtpDeviceUsbUm.pdb\nbin\AmtPtpHidFilter.pdb\n\n' > bin/driver.ddf
-          makecab -f bin/driver.ddf
-          mv disk1/driver.cab bin/driver.cab
-          zip -r drivers.zip bin/
+      # - name: Build driver
+      #   shell: bash
+      #   run: |
+      #     ln -s ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x64/apivalidator.exe ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x86/apivalidator.exe
+      #     sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj
+      #     sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj
+      #     msbuild.exe ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -p:Configuration=Release -p:Platform=x64
+      #     msbuild.exe ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -p:Configuration=Release -p:Platform=x64
+      #     mkdir bin
+      #     cp build/AmtPtpDevice_AMD64.inf bin/
+      #     cp AmtPtpDeviceUsbUm/build/AmtPtpDeviceUsbUm/x64/Release/AmtPtpDeviceUsbUm.dll bin/
+      #     cp AmtPtpHidFilter/build/AmtPtpHidFilter/x64/Release/AmtPtpHidFilter.sys bin/
+      #     cp AmtPtpDeviceUsbUm/build/AmtPtpDeviceUsbUm/x64/Release/AmtPtpDeviceUsbUm.pdb bin/
+      #     cp AmtPtpHidFilter/build/AmtPtpHidFilter/x64/Release/AmtPtpHidFilter.pdb bin/
+      #     echo -e '.OPTION EXPLICIT ;\n.Set CabinetName1=driver.cab\n.Set CompressionType=LZX\n.Set CabinetFileCountThreshold=0\n.Set FolderFileCountThreshold=0\n.Set FolderSizeThreshold=0\n.Set MaxCabinetSize=0\n.Set MaxDiskFileCount=0\n.Set MaxDiskSize=0\n\n.Set DestinationDir= ;\nbin\AmtPtpDevice_AMD64.inf\nbin\AmtPtpDeviceUsbUm.dll\nbin\AmtPtpHidFilter.sys\nbin\AmtPtpDeviceUsbUm.pdb\nbin\AmtPtpHidFilter.pdb\n\n' > bin/driver.ddf
+      #     makecab -f bin/driver.ddf
+      #     mv disk1/driver.cab bin/driver.cab
+      #     zip -r drivers.zip bin/
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: drivers
-          path: drivers.zip
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: drivers
+      #     path: drivers.zip
 
 
