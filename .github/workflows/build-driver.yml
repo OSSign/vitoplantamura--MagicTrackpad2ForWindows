@@ -18,12 +18,16 @@ jobs:
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
+      
+      - name: Nuget install
+        run: |
+          nuget restore ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -PackagesDirectory=${{ github.workspace }}\packages
+          nuget restore ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -PackagesDirectory=${{ github.workspace }}\packages
+          Add-Content $env:GITHUB_PATH "${{ github.workspace }}\packages\Microsoft.Windows.WDK.x64.10.0.26100.6584\c\bin\10.0.26100.0\x64"
 
       - name: Build driver
         shell: bash
         run: |
-          nuget.exe restore ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj
-          nuget.exe restore ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj 
           msbuild.exe ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -p:Configuration=Release -p:Platform=x64
           msbuild.exe ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -p:Configuration=Release -p:Platform=x64
           mkdir bin
