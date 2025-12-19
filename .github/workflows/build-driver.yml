@@ -34,15 +34,7 @@ jobs:
       - name: Build driver
         shell: bash
         run: |
-#          ls -al ./packages
-#          ls -al ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/
-#          ls -al ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/
-#          ls -al ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/
-#          ls -al ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/
           cp -r ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x64 ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x86         
-#          ls -al ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x64/
-#          mkdir -p packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x86/
-#          ln -s ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x64/apivalidator.exe ./packages/Microsoft.Windows.WDK.x64.10.0.26100.6584/c/bin/10.0.26100.0/x86/apivalidator.exe
           sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj
           sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj
           msbuild.exe ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -p:Configuration=Release -p:Platform=x64
