@@ -28,6 +28,8 @@ jobs:
       - name: Build driver
         shell: bash
         run: |
+          sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj
+          sed -ie 's/<SignMode.*ProductionSign/<SignMode>Off/g' ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj
           msbuild.exe ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -p:Configuration=Release -p:Platform=x64
           msbuild.exe ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -p:Configuration=Release -p:Platform=x64
           mkdir bin
