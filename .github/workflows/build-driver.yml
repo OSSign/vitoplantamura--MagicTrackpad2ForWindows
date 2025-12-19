@@ -22,6 +22,8 @@ jobs:
       - name: Build driver
         shell: bash
         run: |
+          nuget.exe restore ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj
+          nuget.exe restore ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj 
           msbuild.exe ./AmtPtpDeviceUsbUm/MagicTrackpad2PtpDevice.vcxproj -p:Configuration=Release -p:Platform=x64
           msbuild.exe ./AmtPtpHidFilter/AmtPtpHidFilter.vcxproj -p:Configuration=Release -p:Platform=x64
           mkdir bin
